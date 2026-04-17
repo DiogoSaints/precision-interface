@@ -89,16 +89,22 @@ export function Sidebar() {
                   <a
                     href="#"
                     className={cn(
-                      "group flex h-8 items-center gap-2.5 rounded-sm px-2 text-[13px] transition-colors",
+                      "group relative flex h-8 items-center gap-2.5 rounded-sm px-2 text-[13px] transition-colors",
                       it.active
                         ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                         : "text-sidebar-foreground hover:bg-sidebar-accent/60",
                     )}
                   >
-                    <it.icon className="h-3.5 w-3.5 shrink-0 stroke-[1.5]" />
+                    {it.active && (
+                      <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r bg-accent" />
+                    )}
+                    <it.icon className={cn("h-3.5 w-3.5 shrink-0 stroke-[1.5]", it.active && "text-accent")} />
                     <span className="flex-1 truncate">{it.label}</span>
                     {typeof it.count === "number" && (
-                      <span className="mono text-[10px] tabular text-muted-foreground">
+                      <span className={cn(
+                        "mono text-[10px] tabular",
+                        it.active ? "text-foreground font-semibold" : "text-muted-foreground"
+                      )}>
                         {it.count.toLocaleString("pt-BR")}
                       </span>
                     )}

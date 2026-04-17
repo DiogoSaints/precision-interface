@@ -5,13 +5,14 @@ export function Topbar() {
   return (
     <header className="flex h-12 shrink-0 items-center justify-between border-b border-border bg-surface px-4">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-1.5 text-[13px]">
-        <span className="text-muted-foreground">Operação</span>
-        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 stroke-[1.5]" />
-        <span className="text-muted-foreground">Triagem</span>
-        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 stroke-[1.5]" />
+      <div className="flex items-center gap-1.5 text-[12.5px]">
+        <span className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors">Operação</span>
+        <ChevronRight className="h-3 w-3 text-muted-foreground/50 stroke-[1.5]" />
+        <span className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors">Triagem</span>
+        <ChevronRight className="h-3 w-3 text-muted-foreground/50 stroke-[1.5]" />
         <span className="font-medium text-foreground">Fila inicial</span>
-        <span className="mono ml-2 rounded-sm border border-border bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+        <span className="mono ml-1.5 inline-flex items-center gap-1 rounded-sm border border-border bg-surface-sunken px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+          <span className="h-1 w-1 rounded-full bg-accent" />
           BCH-2024
         </span>
       </div>
