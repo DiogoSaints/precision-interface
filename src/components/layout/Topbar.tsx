@@ -1,7 +1,10 @@
 import { ChevronRight, Search, Command, Bell, HelpCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCommandPalette } from "@/components/command-palette/CommandPaletteProvider";
 
 export function Topbar() {
+  const { setOpen } = useCommandPalette();
+
   return (
     <header className="flex h-12 shrink-0 items-center justify-between border-b border-border bg-surface px-4">
       {/* Breadcrumbs */}
@@ -19,21 +22,32 @@ export function Topbar() {
 
       {/* Search */}
       <div className="mx-6 hidden max-w-md flex-1 lg:flex">
-        <div className="group relative flex h-8 w-full items-center rounded-sm border border-border bg-surface-sunken px-2.5 transition-colors focus-within:border-accent focus-within:bg-surface">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="group relative flex h-8 w-full items-center rounded-sm border border-border bg-surface-sunken px-2.5 text-left transition-colors hover:border-border-strong hover:bg-surface focus-visible:border-accent focus-visible:bg-surface"
+        >
           <Search className="h-3.5 w-3.5 stroke-[1.5] text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Buscar termos, grupos, lotes, PN/COD…"
-            className="h-full flex-1 bg-transparent px-2 text-[13px] outline-none placeholder:text-muted-foreground"
-          />
+          <span className="flex-1 px-2 text-[13px] text-muted-foreground">
+            Buscar termos, grupos, lotes, PN/COD…
+          </span>
           <kbd className="mono flex items-center gap-0.5 rounded-sm border border-border bg-surface px-1 py-0.5 text-[10px] text-muted-foreground">
             <Command className="h-2.5 w-2.5" />K
           </kbd>
-        </div>
+        </button>
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-1">
+        <Button
+          variant="toolbar"
+          size="icon-sm"
+          className="lg:hidden"
+          onClick={() => setOpen(true)}
+          aria-label="Buscar"
+        >
+          <Search className="h-3.5 w-3.5" />
+        </Button>
         <Button variant="toolbar" size="sm">
           <HelpCircle className="h-3.5 w-3.5" />
           Atalhos
