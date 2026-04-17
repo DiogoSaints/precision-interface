@@ -55,7 +55,7 @@ function Th({
   sortable,
   align = "left",
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   sortable?: boolean;
   align?: "left" | "right" | "center";
