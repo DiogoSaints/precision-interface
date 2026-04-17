@@ -63,10 +63,11 @@ function Th({
   return (
     <th
       className={cn(
-        "h-9 border-b border-border bg-surface-sunken px-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground",
+        "h-9 border-b border-border bg-surface-sunken px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground shadow-[inset_0_-1px_0_0_hsl(var(--border))]",
         align === "right" && "text-right",
         align === "center" && "text-center",
         align === "left" && "text-left",
+        sortable && "cursor-pointer hover:text-foreground transition-colors",
         className,
       )}
     >
@@ -77,7 +78,7 @@ function Th({
         )}
       >
         {children}
-        {sortable && <ArrowUpDown className="h-3 w-3 stroke-[1.5] opacity-50" />}
+        {sortable && <ArrowUpDown className="h-2.5 w-2.5 stroke-[1.5] opacity-40" />}
       </div>
     </th>
   );
@@ -86,7 +87,7 @@ function Th({
 export function TermsTable() {
   return (
     <div className="flex-1 overflow-hidden border-b border-border bg-surface">
-      <div className="h-full overflow-auto">
+      <div className="scroll-precision h-full overflow-auto">
         <table className="w-full border-separate border-spacing-0 text-[13px]">
           <thead className="sticky top-0 z-10">
             <tr>
@@ -109,76 +110,82 @@ export function TermsTable() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((r, idx) => (
-              <tr
-                key={r.id}
-                className={cn(
-                  "group transition-colors hover:bg-accent-soft/40",
-                  idx % 2 === 1 && "bg-surface-sunken/30",
-                )}
-              >
-                <td className="border-b border-border pl-4">
-                  <input
-                    type="checkbox"
-                    className="h-3.5 w-3.5 cursor-pointer rounded-sm border-border-strong accent-primary"
-                  />
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  <span className="mono text-[11px] text-muted-foreground">{r.id}</span>
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate font-medium text-foreground">{r.term}</span>
-                    {r.normalized !== r.term && (
-                      <span title={`Normalizado: ${r.normalized}`} className="shrink-0">
-                        <Sparkles className="h-3 w-3 stroke-[1.5] text-accent" />
-                      </span>
+            {rows.map((r, idx) => {
+              const selected = idx < 3;
+              return (
+                <tr
+                  key={r.id}
+                  className={cn(
+                    "group relative transition-colors",
+                    selected
+                      ? "bg-accent-soft/50 hover:bg-accent-soft/70"
+                      : "hover:bg-surface-sunken/60",
+                  )}
+                >
+                  <td className={cn("relative border-b border-subtle pl-4", selected && "before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-accent")}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={selected}
+                      className="h-3.5 w-3.5 cursor-pointer rounded-sm border-border-strong accent-primary"
+                    />
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    <span className="mono text-[11px] text-muted-foreground">{r.id}</span>
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="truncate font-medium text-foreground">{r.term}</span>
+                      {r.normalized !== r.term && (
+                        <span title={`Normalizado: ${r.normalized}`} className="shrink-0">
+                          <Sparkles className="h-3 w-3 stroke-[1.5] text-accent" />
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5 text-foreground">{r.brand}</td>
+                  <td className="border-b border-subtle px-3 py-2.5 text-right tabular text-foreground">
+                    {r.volume.toLocaleString("pt-BR")}
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                      <span className={cn("h-1.5 w-1.5 rounded-full", originDot[r.origin])} />
+                      {r.origin}
+                    </span>
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    {r.pn ? (
+                      <span className="mono text-[11px] text-foreground">{r.pn}</span>
+                    ) : (
+                      <span className="mono text-[11px] text-muted-foreground/50">—</span>
                     )}
-                  </div>
-                </td>
-                <td className="border-b border-border px-3 py-2 text-foreground">{r.brand}</td>
-                <td className="border-b border-border px-3 py-2 text-right tabular text-foreground">
-                  {r.volume.toLocaleString("pt-BR")}
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-                    <span className={cn("h-1.5 w-1.5 rounded-full", originDot[r.origin])} />
-                    {r.origin}
-                  </span>
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  {r.pn ? (
-                    <span className="mono text-[11px] text-foreground">{r.pn}</span>
-                  ) : (
-                    <span className="mono text-[11px] text-muted-foreground/60">—</span>
-                  )}
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  {r.group ? (
-                    <a href="#" className="mono text-[11px] text-accent hover:underline">
-                      {r.group}
-                    </a>
-                  ) : (
-                    <span className="mono text-[11px] text-muted-foreground/60">—</span>
-                  )}
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  <Badge variant={statusVariant[r.status]}>{r.status}</Badge>
-                </td>
-                <td className="border-b border-border px-3 py-2">
-                  <span className="mono text-[11px] text-muted-foreground tabular">{r.importedAt}</span>
-                </td>
-                <td className="border-b border-border px-2 py-2">
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="opacity-0 group-hover:opacity-100"
-                  >
-                    <MoreHorizontal className="h-3.5 w-3.5" />
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    {r.group ? (
+                      <a href="#" className="mono text-[11px] text-accent hover:underline">
+                        {r.group}
+                      </a>
+                    ) : (
+                      <span className="mono text-[11px] text-muted-foreground/50">—</span>
+                    )}
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    <Badge variant={statusVariant[r.status]}>{r.status}</Badge>
+                  </td>
+                  <td className="border-b border-subtle px-3 py-2.5">
+                    <span className="mono text-[11px] text-muted-foreground tabular">{r.importedAt}</span>
+                  </td>
+                  <td className="border-b border-subtle px-2 py-2.5">
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="h-7 w-7 opacity-0 group-hover:opacity-100"
+                    >
+                      <MoreHorizontal className="h-3.5 w-3.5" />
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
